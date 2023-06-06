@@ -1,4 +1,5 @@
 <script>
+  import toastr from "toastr";
   import GoalAPI from "../api/goals.js";
   import goalStore from "../stores/goalStore.js";
 
@@ -34,11 +35,10 @@
 
     try {
       await GoalAPI.updateGoal(goal._id, updatedGoal);
-
       goal = updatedGoal;
       updateGoalStatusInStore();
     } catch (error) {
-      console.error("Error updating goal:", error);
+      toastr.error("Error updating goal.");
     }
   }
 
@@ -48,44 +48,45 @@
     );
 
     goalStore.update((store) => {
-      let newStore = JSON.parse(JSON.stringify(store));
-
+      let newCurrentGoals = [...store.currentGoals];
+      let newAchievedGoals = [...store.achievedGoals];
       if (allSubgoalsAchieved) {
-        newStore.currentGoals = newStore.currentGoals.filter(
-          (g) => g._id !== goal._id
-        );
-        newStore.achievedGoals.push(JSON.parse(JSON.stringify(goal)));
+        newCurrentGoals = newCurrentGoals.filter((g) => g._id !== goal._id);
+        newAchievedGoals.push(goal);
       } else {
-        newStore.achievedGoals = newStore.achievedGoals.filter(
-          (g) => g._id !== goal._id
-        );
-        newStore.currentGoals.push(JSON.parse(JSON.stringify(goal)));
+        newAchievedGoals = newAchievedGoals.filter((g) => g._id !== goal._id);
+        newCurrentGoals.push(goal);
       }
 
-      return newStore;
+      return {
+        currentGoals: newCurrentGoals,
+        achievedGoals: newAchievedGoals,
+      };
     });
   }
 
   async function handleDeleteButtonClick() {
-    try {
-      console.log(goal);
-      await GoalAPI.deleteGoal(goal._id);
-      goalStore.update((store) => {
-        let newStore = JSON.parse(JSON.stringify(store));
+  try {
+    const response = await GoalAPI.deleteGoal(goal._id);
 
-        newStore.currentGoals = newStore.currentGoals.filter(
-          (g) => g._id !== goal._id
-        );
-        newStore.achievedGoals = newStore.achievedGoals.filter(
-          (g) => g._id !== goal._id
-        );
+    if (response.status === 200){
+      toastr.success("Successfully deleted goal.");
+       goalStore.update((store) => {
 
-        return newStore;
-      });
-    } catch (error) {
-      console.error("Error deleting goal:", error);
+      let newCurrentGoals = store.currentGoals.filter((g) => g._id !== goal._id);
+      let newAchievedGoals = store.achievedGoals.filter((g) => g._id !== goal._id);
+
+      return {
+        currentGoals: newCurrentGoals,
+        achievedGoals: newAchievedGoals
+      };
+    });
     }
+  } catch (error) {
+    toastr.error("Error deleting goal.")
   }
+}
+
 </script>
 
 {#if className === "small"}
@@ -134,7 +135,7 @@
         <i
           class="fa-solid fa-trash"
           on:click={handleDeleteButtonClick}
-          on:keydown
+          on:keydown={handleDeleteButtonClick}
         />
       </div>
     {/if}

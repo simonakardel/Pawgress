@@ -1,5 +1,6 @@
 <script>
   import { restrictParagraphLength } from "../utils/helperFunctions.js";
+
   export let challenge;
   export let onTaskCompletion;
 
@@ -7,7 +8,7 @@
   let completedTasksCount = 0;
   let allTasksCompleted = false;
 
-  function handleCheckboxChange(task, index) {
+  function handleCheckboxChange(task) {
     onTaskCompletion(challenge._id, task._id);
   }
 
@@ -64,12 +65,12 @@
 
   {#if isChallengeVisible}
     <div class="expanding-part">
-      {#each challenge.tasks as task, index}
+      {#each challenge.tasks as task}
         <div class="flex-row tasks">
           <input
             type="checkbox"
             bind:checked={task.completed}
-            on:change={() => handleCheckboxChange(task, index)}
+            on:change={() => handleCheckboxChange(task)}
           />
 
           <h4>Day {task.dayNumber}</h4>

@@ -21,12 +21,12 @@
     trainedGoals[index] = { ...trainedGoals[index], rating: r };
   }
 
-  function setRatingOther(index, r) {
+  function setRatingBehaviour(index, r) {
     behaviours[index] = { ...behaviours[index], rating: r };
   }
 
   function addTrainedGoal() {
-    trainedGoals = [...trainedGoals, { rating: 0, goal: null, name: "" }];
+    trainedGoals = [...trainedGoals, { rating: 0, goal: null, name: ""}];
   }
 
   function addInputText() {
@@ -38,12 +38,12 @@
     const newLog = {
       notes: notes,
       date: date,
-      goals: trainedGoals.map((t) => ({
-        _id: t.goal ? t.goal._id : null,
-        rating: t.rating,
-        name: t.goal,
+      goals: trainedGoals.map((trainedGoal) => ({
+        _id: trainedGoal.goal ? trainedGoal.goal._id : null,
+        rating: trainedGoal.rating,
+        name: trainedGoal.goal,
       })),
-      behaviours: behaviours.map((b) => ({ name: b.name, rating: b.rating })),
+      behaviours: behaviours.map((behavior) => ({ name: behavior.name, rating: behavior.rating })),
     };
 
     try {
@@ -51,8 +51,6 @@
       if (response.status === 200) {
         const newLog = { ...response.data, date: new Date(response.data.date) };
         logsStore.update((logs) => [...logs, newLog]);
-
-        console.log($logsStore,"log store");
 
         date = "";
         notes = "";
@@ -134,8 +132,8 @@
                     class={`fa-solid fa-paw ${
                       behaviour.rating >= i ? "active" : ""
                     }`}
-                    on:click={() => setRatingOther(index, i)}
-                    on:keydown
+                    on:click={() => setRatingBehaviour(index, i)}
+                    on:keydown={() => setRatingBehaviour(index, i)}
                   />
                 {/each}
               </div>

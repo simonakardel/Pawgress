@@ -42,12 +42,12 @@
               userState.update(() => response.data);
               toastr.success("Successfully updated dog profile");
       } else {
-        toastr.error("There was an error while updating.");
+        toastr.error("There was an error while updating profile.");
       }
 
     } catch (error) {
 
-      toastr.error("There was an error while updating.");
+      toastr.error("There was an error while updating profile.");
     }
   }
 
@@ -57,6 +57,7 @@
     breed = user?.dog?.breed;
     dob = user?.dog?.dateOfBirth;
   }
+  
 
   onMount(() => {
     unsubscribe = userState.subscribe((updatedUser) => {
