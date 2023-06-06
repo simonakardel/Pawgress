@@ -55,6 +55,7 @@
     box-shadow: 0px 1px 3px 0px rgba(16, 24, 40, 0.1);
     background: #fcfcfd;
     color: #224762;
+    min-height: 250px;
   }
 
   h4 {
@@ -67,6 +68,11 @@
     background: #3688a6;
     color: white;
     height: 35px;
+  }
+
+  .join-challenge-btn:hover {
+    background: #90C2D3;
+    color: #112f45;
   }
 
   .flex-row.heading {

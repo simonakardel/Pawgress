@@ -1,4 +1,4 @@
-const maxParagraphLenght = 200; 
+const maxParagraphLenght = 180; 
 
 export function restrictParagraphLength(paragraph) {
   if (paragraph.length <= maxParagraphLenght) {

@@ -274,6 +274,10 @@
     background: #0a3960;
   }
 
+  .button:hover {
+    background: #224762;
+  }
+
   .flex-row.main {
     justify-content: space-between;
     align-items: flex-start;

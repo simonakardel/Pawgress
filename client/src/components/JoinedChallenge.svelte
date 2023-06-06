@@ -19,8 +19,9 @@
   $: allTasksCompleted = completedTasksCount === challenge.tasks.length;
 </script>
 
-<div class="challenge-container">
-  <div class="flex-row heading">
+<div class="flex-column challenge-container">
+  <div>
+    <div class="flex-row heading">
     <div>
       <h4>{challenge.name}</h4>
       <div class="author">
@@ -43,22 +44,23 @@
     </div>
   </div>
 
-  <div class="flex-row description">
+
     <div>
       <p>{restrictParagraphLength(challenge.description)}</p>
     </div>
-
-    <div
-      on:click={toggleChallenge}
-      on:keydown={toggleChallenge}
-    >
-      <i
-        class={isChallengeVisible
-          ? "fa-solid fa-angle-down rotated"
-          : "fa-solid fa-angle-down"}
-      />
-    </div>
   </div>
+
+  <div>
+      <div class="flex-row arrow"
+  on:click={toggleChallenge}
+  on:keydown={toggleChallenge}
+>
+  <i
+    class={isChallengeVisible
+      ? "fa-solid fa-angle-down rotated"
+      : "fa-solid fa-angle-down"}
+  />
+</div>
 
   {#if isChallengeVisible}
     <div class="expanding-part">
@@ -76,6 +78,11 @@
       {/each}
     </div>
   {/if}
+  </div>
+  
+
+
+
 </div>
 
 <style>
@@ -87,6 +94,8 @@
     box-shadow: 0px 1px 3px 0px rgba(16, 24, 40, 0.1);
     background: #fcfcfd;
     color: #224762;
+    min-height: 210px;
+    justify-content: space-between;
   }
 
   h4 {
@@ -124,10 +133,7 @@
     margin-right: 10px;
   }
 
-  .flex-row.description {
-    justify-content: space-between;
-    align-items: flex-end;
-  }
+
 
   .flex-row.heading {
     justify-content: space-between;
@@ -153,5 +159,11 @@
 
   input[type="checkbox"] {
     box-shadow: none;
+  }
+
+  .arrow {
+    align-items: flex-end;
+    justify-content: flex-end;
+
   }
 </style>
