@@ -40,7 +40,6 @@ const setupSocket = (httpServer) => {
       const token = parseCookies(socket.request.headers.cookie).accessToken;
       try {
         const user = await authenticateToken(token);
-        console.log("authenticated user", user)
         if (user) {
           socket.user = user;
           next();
@@ -90,7 +89,7 @@ const setupSocket = (httpServer) => {
 
           user.challenges.push(newChallenge);
 
-          // Save the updated user document
+
           await user.save();
 
           socket.emit("challenge-joined-successfully", {
@@ -98,18 +97,18 @@ const setupSocket = (httpServer) => {
             newChallenge: challenge
           });
 
-          // Now, notify the challenge creator
-          const challengeCreatorId = challenge.createdBy._id; // the id of the challenge creator
-          const userFirstName = user.firstName; // the user's first name
-          const challengeName = challenge.name; // the challenge's name
+       
+          const challengeCreatorId = challenge.createdBy._id; 
+          const userFirstName = user.firstName; 
+          const challengeName = challenge.name;
 
-          // create the message
+
           const message = `${userFirstName} has joined challenge ${challengeName}`;
 
-          // get the socket id of the challenge creator
+
           const creatorSocketId = getSocketIdFromUserId(challengeCreatorId);
 
-          // send the message to the creator
+
           io.to(creatorSocketId).emit("user-joined", {
             message
           });

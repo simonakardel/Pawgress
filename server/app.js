@@ -10,7 +10,7 @@ const app = express();
 import cors from "cors";
 app.use(cors({
     credentials: true,
-    origin: true
+    origin: ["http://localhost:5173"]
 }));
 
 import setupSocket from "./socket/socket.js";
