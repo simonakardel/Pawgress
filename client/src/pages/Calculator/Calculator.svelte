@@ -26,6 +26,8 @@
   let weekMealContent;
   let selectedTimePeriod;
 
+
+
   $: if (weightValue > 0 && selectedDogActivity && ageValue) {
     activityValue = getActivityValue(selectedDogActivity);
     dailyGrams = calculateDailyGrams(weightValue, activityValue);
@@ -42,6 +44,8 @@
   $: if (mealContent && selectedTimePeriod) {
     weekMealContent = calculateTotalGrams(mealContent, selectedTimePeriod);
   }
+
+
 
   function getActivityValue(activityLevel) {
     const ageActivityMap = {
@@ -103,9 +107,12 @@
     event.target.scrollIntoView({ behavior: "smooth" });
   }
 
+
+
   onMount(() => {
     document.title = "Calculator || Pawgress";
   });
+  
 </script>
 
 <div class="dashboard-container">

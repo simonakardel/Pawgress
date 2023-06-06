@@ -7,8 +7,7 @@
   let subject = "";
   let message = "";
 
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit() {
 
     const data = {
       subject,
@@ -33,6 +32,7 @@
   onMount(() => {
     document.title = "Contact || Pawgress";
   });
+
 </script>
 
 <div class="dashboard-container flex-row">
@@ -74,6 +74,8 @@
     alt="wawing-dog-illustration"
   />
 </div>
+
+
 
 <style>
   .submit-btn {

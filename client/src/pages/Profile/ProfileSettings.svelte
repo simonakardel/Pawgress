@@ -12,6 +12,7 @@
   onMount(() => {
     document.title = "Settings | Pawgress";
   });
+  
 </script>
 
 <div class="dashboard-container">

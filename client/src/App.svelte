@@ -1,5 +1,5 @@
 <script>
-  import { Router, Link, Route, useLocation } from "svelte-navigator";
+  import { Router, Route } from "svelte-navigator";
   import Signup from "./pages/Signup/Signup.svelte";
   import Login from "./pages/Login/Login.svelte";
   import Frontpage from "./pages/Frontpage/Frontpage.svelte";
@@ -14,7 +14,6 @@
   import ProfileSettings from "./pages/Profile/ProfileSettings.svelte";
   import NewChallenge from "./pages/Challenges/NewChallenge.svelte";
   import AllChallenges from "./pages/Challenges/AllChallenges.svelte";
-  import PublicChallenge from "./components/PublicChallenge.svelte";
   import ChallengeDetails from "./pages/Challenges/ChallengeDetails.svelte";
 
 

@@ -8,6 +8,7 @@
   import JoinedChallenge from "../../components/JoinedChallenge.svelte";
   import userState from "../../stores/userStore.js";
   import UserAPI from "../../api/user.js";
+  import toastr from "toastr";
 
   let user = null;
   let userChallenges = [];
@@ -17,25 +18,21 @@
     if (user && user.challenges) {
       userChallenges = user.challenges;
       updateChallengeStore();
-      console.log("User Challenges: ", userChallenges);
     }
   });
   let handleTaskCompletion = async (challengeId, taskId) => {
     let updatedChallenge = {};
 
-
     userState.update((user) => {
       updatedChallenge = user.challenges.find(
         (chal) => chal.challenge._id === challengeId
       );
-      return user; 
+      return user;
     });
-
 
     let completedTask = updatedChallenge.tasksStatus.find(
       (task) => task.task === taskId
     );
-
 
     if (!completedTask) {
       console.error(
@@ -44,22 +41,18 @@
       return;
     }
 
-
     let dataToUpdate = {
       _id: challengeId,
       tasksStatus: [
         {
-          taskId: completedTask.task, 
+          taskId: completedTask.task,
           completed: !completedTask.completed,
         },
       ],
     };
 
-
     try {
- 
       const updatedUser = await UserAPI.updateUserChallenge(dataToUpdate);
-    
 
       userState.set(updatedUser.data);
 
@@ -82,15 +75,13 @@
         )
       );
     } catch (error) {
-      console.error("Error fetching challenges:", error);
+      toastr.error("There was an error");
     }
   }
 
   onMount(() => {
     document.title = "Challenges | Pawgress";
     updateChallengeStore();
-
-
   });
 
   onDestroy(() => {

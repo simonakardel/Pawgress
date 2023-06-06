@@ -44,7 +44,6 @@
   onMount(async () => {
     try {
       const response = await LogsAPI.getTrainingLogs();
-      console.log("training", response.data)
       logsStore.set(
         response.data
           .map((log) => {

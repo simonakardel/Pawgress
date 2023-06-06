@@ -143,6 +143,8 @@
 
 <style>
   .goal-container {
+    width: 240px;
+    min-height: 150px;
     padding: 20px;
     border-radius: 25px;
     box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.06);

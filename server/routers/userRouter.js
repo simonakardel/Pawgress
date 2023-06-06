@@ -7,30 +7,12 @@ import {
 } from "../middleware/refreshToken.js"
 
 import User from "../database/models/User.js";
+import { updateUserTasksStatus } from "../utils/updateUserTasksStatus.js";
 
 import {
     body,
     validationResult
 } from 'express-validator';
-
-function updateUserTasksStatus(userDocument) {
-    let user = userDocument.toObject();
-    for (let challengeIndex = 0; challengeIndex < user.challenges.length; challengeIndex++) {
-        let statusMap = new Map();
-        for (let taskStatus of user.challenges[challengeIndex].tasksStatus) {
-            statusMap.set(taskStatus.task.toString(), taskStatus.completed);
-        }
-
-        let tasksWithStatus = user.challenges[challengeIndex].challenge.tasks.map(task => ({
-            ...task,
-            completed: statusMap.has(task._id.toString()) ? statusMap.get(task._id.toString()) : false
-        }));
-
-        user.challenges[challengeIndex].challenge.tasks = tasksWithStatus;
-    }
-    return user;
-}
-
 
 router.use(refreshTokenMiddleware);
 
@@ -50,7 +32,7 @@ router.get("/user", async (req, res) => {
             });
         }
 
-        let user = await updateUserTasksStatus(userDocument);
+        const user = await updateUserTasksStatus(userDocument);
 
         res.json({
             user: user
@@ -82,7 +64,7 @@ router.patch('/user',
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            console.log("validation not passed")
+
             return res.status(400).json({
                 errors: errors.array()
             });
@@ -99,7 +81,7 @@ router.patch('/user',
                     message: "User not found"
                 });
             }
-            console.log("found user in patch", user);
+  
 
             for (let key in updates) {
                 if (key !== 'dog') {

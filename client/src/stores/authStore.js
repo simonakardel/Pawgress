@@ -1,10 +1,10 @@
 import { writable } from "svelte/store";
 import { io } from "socket.io-client";
 import toastr from "toastr";
+import userState from "./userStore";
 
 const authState = writable({
   isAuthenticated: false,
-  user: null,
   socket: null,
 });
 
@@ -19,10 +19,8 @@ export default {
     authState.update((state) => ({ ...state, isAuthenticated: false }));
   },
   joinChallenge: (challengeId) => {
-    console.log('Emitting join-challenge event');
     authState.update((state) => {
       if (state.socket) {
-        console.log('Emitting join-challenge event');
         state.socket.emit("join-challenge", { challengeId });
       }
       return state;
@@ -44,24 +42,25 @@ function setupSocketConnection() {
 
   socket.on("connect_error", (err) => {
     if (err.message === "Authentication error") {
-      console.log("Authentication error. Reconnecting...");
+      toastr.error("Unathorized.");
     }
   });
 
   socket.on("disconnect", (reason) => {
-    if (reason === "io server disconnect") {
+    if (reason === "transport close") {
       socket.connect();
     }
   });
 
-  socket.on("user-joined-challenge", (data) => {
-    console.log(`User ${data.userId} joined challenge ${data.challengeId}`);
+  socket.on("challenge-joined-successfully", (data) => {
+    userState.update(() => data.user)
+    toastr.success("Successfully joined challenge!")
   });
 
-  socket.on("user-joined", (data) => {
-    toastr.success(data.message);
+  socket.on("error", (data) => {
+    toastr.error(data.message);
   });
-
+  
   socket.connect();
 }
 

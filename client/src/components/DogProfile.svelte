@@ -30,7 +30,6 @@
     dogName = user?.dog?.name;
     breed = user?.dog?.breed;
     dob = user?.dog?.dateOfBirth;
-    console.log(user);
   });
 
   async function handleSaveButtonClick() {
@@ -53,9 +52,8 @@
         toastr.error("There was an error, please try again.");
       }
 
-
     } catch (error) {
-      console.error("Error updating user:", error);
+
       toastr.error("There was an error, please try again.");
     }
   }

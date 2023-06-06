@@ -6,14 +6,11 @@
   onMount(() => {
     document.title = "Training Logs || Pawgress";
   });
-
-
   
 </script>
 
 <div class="dashboard-container">
   <NewLog className="large"/>
-
 
   <h2>Training Logs</h2>
 

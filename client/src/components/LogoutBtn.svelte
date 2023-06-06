@@ -6,7 +6,6 @@
 
   async function handleLogout() {
     try {
-      console.log("logout");
       const response = await AuthAPI.logout();
       authStore.logout();
       toastr.success(response.data);

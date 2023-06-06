@@ -5,7 +5,7 @@
 
 <section>
   <h2>Completed Goals</h2>
-  <div class="goals">
+  <div class="flex-row goals">
     {#each achievedGoals as goal, index (goal._id)}
       {#if index === 4}
         <div>
@@ -27,11 +27,6 @@
 </section>
 
 <style>
-  .goals {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 30px;
-  }
 
   h2 {
     max-width: 500px;
@@ -41,10 +36,19 @@
     margin-top: 90px;
   }
 
-  .img-div {
-    width: 100%;
+  .goals {
+    padding-top: 30px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 60px;
   }
+
+  .img-div {
+    width: 280px;
+  }
+
   img {
-    max-height: 200px;
+    max-height: 250px;
   }
 </style>

@@ -37,10 +37,8 @@
         currentGoals: currentGoalsResponse.data.goals,
         achievedGoals: achievedGoalsResponse.data.goals,
       });
-
-  
     } catch (error) {
-      console.error("Error fetching current goals:", error);
+      toastr.error("There was an error. Please try again.");
     }
   });
 
@@ -55,26 +53,23 @@
 
     try {
       const response = await GoalAPI.createGoal(newGoal);
-      if(response.status === 200){
+      if (response.status === 200) {
         toastr.success("New goal added!");
         goalStore.update((value) => {
-        return {
-          ...value,
-          currentGoals: [...value.currentGoals, response.data],
-        };
-      });
+          return {
+            ...value,
+            currentGoals: [...value.currentGoals, response.data],
+          };
+        });
 
+        goalName = "";
+        goalDescription = "";
+        steps = [""];
 
-      goalName = "";
-      goalDescription = "";
-      steps = [""];
-
-      newGoalSelected = false;
+        newGoalSelected = false;
       } else {
         toastr.error("There was an error, try again");
       }
-
-
     } catch (error) {
       toastr.error("There was an error, try again");
     }
@@ -184,14 +179,21 @@
   .flex-row.main {
     gap: 20px;
   }
+
   .new-goal-button {
-    background: #ec8b33;
+    background: #f4ba41;
     color: white;
+    width: 150px;
     height: 48px;
     margin: 0;
     position: absolute;
     right: 5vw;
     top: 90px;
+  }
+
+  .new-goal-button:hover {
+    color: #0a3960;
+    background: #ffd170;
   }
 
   .new-goal-button i {

@@ -5,7 +5,7 @@
 
 
   <h2>Current goals</h2>
-  <div class="goals">
+  <div class="flex-row goals">
     {#each currentGoals as goal, index (goal._id)}
       {#if index === 0}
         <div class="img-div">
@@ -26,10 +26,11 @@
 
 <style>
   .goals {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 30px;
     padding-top: 30px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 60px;
   }
 
   h2 {
@@ -38,9 +39,10 @@
 
 
   .img-div {
-    width: 100%;
+    width: 280px;
   }
+
   img {
-    max-height: 200px;
+    max-height: 250px;
   }
 </style>

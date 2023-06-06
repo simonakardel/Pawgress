@@ -7,6 +7,7 @@
   import GoalAPI from "../../api/goals.js";
   import ButtonLink from "../../components/ButtonLink.svelte";
   import Goal from "../../components/Goal.svelte";
+  import toastr from "toastr";
 
   let userData;
   let currentGoals = [];
@@ -17,10 +18,8 @@
     try {
       const response = await UserApi.getDashboardData();
       userData = response.data.user;
-      console.log("user", userData);
       userState.set(userData);
       challenges = userData.challenges;
-      console.log(challenges, "challenges");
 
       const currentGoalsResponse = await GoalAPI.getCurrentGoals();
       currentGoals = currentGoalsResponse.data.goals;
@@ -28,10 +27,8 @@
         ...state,
         currentGoals: currentGoalsResponse.data.goals,
       }));
-
-      console.log("current goals", currentGoalsResponse.data.goals);
     } catch (error) {
-      console.error("Error fetching dashboard data:", error);
+      toastr.error("Error, please reload the page");
     }
   });
 </script>
@@ -57,7 +54,11 @@
           <div class="flex-row">
             <div>
               {#each currentGoals.slice(0, 2) as currentGoal}
-                <Goal goal={currentGoal} className="small" achievedGoalClass=""/>
+                <Goal
+                  goal={currentGoal}
+                  className="small"
+                  achievedGoalClass=""
+                />
               {/each}
             </div>
             <img
@@ -83,26 +84,18 @@
                 </div>
               {/each}
             </div>
-          <img
-          src="dash-chall.svg"
-          alt="dog-illustration"
-        />
-
+            <img
+              src="dash-chall.svg"
+              alt="dog-illustration"
+            />
           </div>
-
-      
-      
         </div>
       </div>
     </div>
   {/if}
 </div>
 
-
-
 <style>
-
-
   .flex-row {
     gap: 30px;
   }
@@ -137,7 +130,6 @@
 
   .flex-row.heading {
     align-items: flex-start;
-
   }
 
   h5 {
