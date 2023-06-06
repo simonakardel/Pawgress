@@ -50,10 +50,10 @@ router.get("/user-challenges", async (req, res) => {
         const userId = req.user._id;
         const user = await User.findById(userId)
             .populate({
-                path: 'challenges.challenge',
+                path: "challenges.challenge",
                 populate: {
-                    path: 'createdBy',
-                    select: 'firstName lastName'
+                    path: "createdBy",
+                    select: "firstName lastName"
                 }
             });
 
@@ -91,8 +91,8 @@ router.get("/user-challenges", async (req, res) => {
 router.post("/challenges", 
 
   [
-    body('name').notEmpty().escape().withMessage('Name is required and must be a string'),
-    body('description').notEmpty().escape().withMessage('Description is required and must be a string'),
+    body("name").notEmpty().escape().withMessage("Name is required and must be a string"),
+    body("description").notEmpty().escape().withMessage("Description is required and must be a string"),
   
   ],
   async (req, res) => {

@@ -12,13 +12,13 @@ router.use(refreshTokenMiddleware);
 
 
 router.post("/contact",
-  // Validation middleware
+
   [
-    body('subject').isString().escape().withMessage('Subject must be a string'),
-    body('message').isString().escape().withMessage('Message must be a string'),
+    body("subject").isString().escape().withMessage("Subject must be a string"),
+    body("message").isString().escape().withMessage("Message must be a string"),
   ],
   async (req, res) => {
-    // Check for validation errors and return if any exist
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -29,7 +29,7 @@ router.post("/contact",
     const userLastName = req.user.lastName;
     const userEmail = req.user.email;
 
-    // transporter
+
     const transporter = nodemailer.createTransport({
         host: "smtp.zoho.eu",
         port: 465,
@@ -40,7 +40,7 @@ router.post("/contact",
         },
     });
   
-    // mail options
+
     const mailOptions = {
       from: process.env.MAIL_USER,
       to: process.env.MAIL_USER,
@@ -49,7 +49,7 @@ router.post("/contact",
       text: message,
     };
 
-    // sending mail
+
     try {
       await transporter.sendMail(mailOptions);
       res.sendStatus(200);

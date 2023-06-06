@@ -34,6 +34,11 @@
     border: none;
     cursor: pointer;
     border-radius: 8px;
+    transition: transform 0.2s ease-in-out;
+  }
+
+  button:active {
+    transform: scale(0.9);
   }
 
   button.tall {

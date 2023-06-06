@@ -70,7 +70,7 @@ router.patch('/user',
             });
         }
 
-        console.log(req.body)
+
         const updates = req.body;
         delete updates.email;
 

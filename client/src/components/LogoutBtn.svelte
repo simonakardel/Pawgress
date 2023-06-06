@@ -31,12 +31,16 @@
     font-weight: 500;
     background: #dae0e4;
     color: #224762;
-
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
     border: none;
+    transition: transform 0.1s ease-in-out;
+  }
+
+  .log-out-btn:active {
+    transform: scale(0.9);
   }
 
   .log-out-btn i {
