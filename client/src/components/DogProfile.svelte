@@ -1,6 +1,6 @@
 <script>
   import userState from "../stores/userStore.js";
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import UserAPI from "../api/user.js";
   import toastr from "toastr";
 
@@ -11,6 +11,8 @@
   let weight;
   let dogName;
   let dob;
+  let unsubscribe;
+  let user;
 
   const handleFileChange = (e) => {
     selectedImage = e.target.files[0];
@@ -22,15 +24,6 @@
       reader.readAsDataURL(selectedImage);
     }
   };
-
-  let user;
-  const unsubscribe = userState.subscribe((authState) => {
-    user = authState;
-    weight = user?.dog?.weight;
-    dogName = user?.dog?.name;
-    breed = user?.dog?.breed;
-    dob = user?.dog?.dateOfBirth;
-  });
 
   async function handleSaveButtonClick() {
     try {
@@ -49,18 +42,42 @@
               userState.update(() => response.data);
               toastr.success("Successfully updated dog profile");
       } else {
-        toastr.error("There was an error, please try again.");
+        toastr.error("There was an error while updating.");
       }
 
     } catch (error) {
 
-      toastr.error("There was an error, please try again.");
+      toastr.error("There was an error while updating.");
     }
   }
 
+  function handleCancelButtonClick(){
+    weight = user?.dog?.weight;
+    dogName = user?.dog?.name;
+    breed = user?.dog?.breed;
+    dob = user?.dog?.dateOfBirth;
+  }
+
   onMount(() => {
-    return unsubscribe;
+    unsubscribe = userState.subscribe((updatedUser) => {
+    user = updatedUser;
+    weight = user?.dog?.weight;
+    dogName = user?.dog?.name;
+    breed = user?.dog?.breed;
+    dob = user?.dog?.dateOfBirth;
+    if (dob) {
+    let date = new Date(dob);
+    dob = date.toISOString().split('T')[0];}
   });
+  
+  });
+
+  onDestroy(() => {
+        if (unsubscribe) {
+            unsubscribe();
+        }
+    });
+  
 </script>
 
 <form bind:this={form}>
@@ -84,7 +101,7 @@
     <input
       type="text"
       name="name"
-      bind:value={user.dog.name}
+      bind:value={dogName}
     />
     <label for="breed">Breed</label>
     <input
@@ -108,7 +125,7 @@
   </div>
 
   <div class="flex-row btn-group">
-    <button class="button grey-btn">Cancel</button>
+    <button class="button grey-btn" on:click|preventDefault={handleCancelButtonClick}>Cancel</button>
     <button
       class="button orange-btn"
       on:click|preventDefault={handleSaveButtonClick}>Save</button

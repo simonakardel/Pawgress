@@ -1,18 +1,15 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import UserAPI from "../api/user.js";
   import userState from "../stores/userStore.js";
   import toastr from "toastr";
 
+
   let user;
   let firstName;
   let lastName;
+  let unsubscribe;
 
-  let unsubscribe = userState.subscribe((updatedUser) => {
-    user = updatedUser;
-    firstName = user?.firstName;
-    lastName = user?.lastName;
-  });
 
   let selectedImage = null;
   let imagePreview;
@@ -28,8 +25,7 @@
     }
   };
 
-  async function handleSaveButtonClick(e) {
-    e.preventDefault();
+  async function handleSaveButtonClick() {
     try {
       const updatedUser = {
         ...user,
@@ -51,9 +47,26 @@
     }
   }
 
+  function handleCancelButtonClick(){
+    firstName = user?.firstName;
+    lastName = user?.lastName;
+  }
+
   onMount(() => {
-    return unsubscribe;
+    unsubscribe = userState.subscribe((updatedUser) => {
+    user = updatedUser;
+    firstName = user?.firstName;
+    lastName = user?.lastName;
   });
+  });
+
+
+    onDestroy(() => {
+        if (unsubscribe) {
+            unsubscribe();
+        }
+    });
+
 </script>
 
 <form class="form-grid">
@@ -94,7 +107,7 @@
   <label for="email">Email address</label>
   <input
     type="text"
-    value={user.email}
+    value={user?.email}
     name="email"
     class="long-input"
     disabled
@@ -104,16 +117,16 @@
   <input
     type="password"
     name="password"
-    value={user.password}
+    value={user?.password}
     class="long-input"
     disabled
   />
   <div />
   <div class="flex-row btn-group">
-    <button class="button grey-btn">Cancel</button>
+    <button class="button grey-btn" on:click|preventDefault={handleCancelButtonClick}>Cancel</button>
     <button
       class="button orange-btn"
-      on:click={handleSaveButtonClick}>Save</button
+      on:click|preventDefault={handleSaveButtonClick}>Save</button
     >
   </div>
 </form>
