@@ -87,6 +87,7 @@
 
   .description {
     color: #51697b;
+    padding: 30px 0;
   }
 
   h2 {

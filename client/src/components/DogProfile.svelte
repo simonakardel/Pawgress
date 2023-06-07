@@ -117,12 +117,16 @@
       bind:value={dob}
     />
     <label for="weight">Current weight</label>
-    <input
+    <div class="flex-row weight">
+         <input
       type="number"
       name="weight"
       min="1"
       bind:value={weight}
     />
+<p>kg</p>
+    </div>
+ 
   </div>
 
   <div class="flex-row btn-group">
@@ -184,6 +188,10 @@
   }
 
   .flex-row.image {
+    gap: 10px;
+  }
+
+  .flex-row.weight {
     gap: 10px;
   }
 </style>

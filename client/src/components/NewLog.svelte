@@ -280,4 +280,8 @@
     justify-content: space-between;
     align-items: flex-start;
   }
+
+  textarea {
+    font-family: 'Poppins', sans-serif;
+  }
 </style>

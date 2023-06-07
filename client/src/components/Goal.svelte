@@ -20,51 +20,56 @@
     isSubgoalsVisible = !isSubgoalsVisible;
   };
 
-  async function handleSubgoalChange(subgoal, index) {
-    let updatedSubgoal = { ...subgoal, achieved: !subgoal.achieved };
+  // UPDATING GOAL ON THE SERVER WHEN CHECKBOXES CHANGE
+  async function handleSubgoalChange(subgoal) {
 
-    let updatedSubgoals = goal.subgoals.map((sg, i) =>
-      i === index ? updatedSubgoal : sg
-    );
+  let updatedSubgoal = { ...subgoal, achieved: subgoal.achieved };
 
-    let updatedGoal = { ...goal, subgoals: updatedSubgoals };
+  let updatedSubgoals = goal.subgoals.map((sg) =>
+    sg._id === subgoal._id ? updatedSubgoal : sg
+  );
 
-    let allSubgoalsAchieved = updatedSubgoals.every((sg) => sg.achieved);
+  let allSubgoalsAchieved = updatedSubgoals.every((sg) => sg.achieved);
 
-    updatedGoal.achieved = allSubgoalsAchieved;
+  let updatedGoal = { ...goal, subgoals: updatedSubgoals, achieved: allSubgoalsAchieved };
 
-    try {
-      await GoalAPI.updateGoal(goal._id, updatedGoal);
-      goal = updatedGoal;
-      updateGoalStatusInStore();
-    } catch (error) {
-      toastr.error("Error updating goal.");
-    }
+  try {
+    await GoalAPI.updateGoal(goal._id, updatedGoal);
+    updateGoalStatusInStore(updatedGoal);
+  } catch (error) {
+    toastr.error("Error updating goal.");
   }
+}
 
-  function updateGoalStatusInStore() {
-    let allSubgoalsAchieved = goal.subgoals.every(
-      (subgoal) => subgoal.achieved
-    );
 
-    goalStore.update((store) => {
-      let newCurrentGoals = [...store.currentGoals];
-      let newAchievedGoals = [...store.achievedGoals];
-      if (allSubgoalsAchieved) {
-        newCurrentGoals = newCurrentGoals.filter((g) => g._id !== goal._id);
-        newAchievedGoals.push(goal);
-      } else {
-        newAchievedGoals = newAchievedGoals.filter((g) => g._id !== goal._id);
-        newCurrentGoals.push(goal);
+  // UPDATING GOAL IN GOAL STORE
+  function updateGoalStatusInStore(updatedGoal) {
+  let allSubgoalsAchieved = updatedGoal.subgoals.every(
+    (subgoal) => subgoal.achieved
+  );
+
+  goalStore.update((store) => {
+    let newCurrentGoals = [...store.currentGoals];
+    let newAchievedGoals = [...store.achievedGoals];
+    if (allSubgoalsAchieved) {
+      newCurrentGoals = newCurrentGoals.filter((g) => g._id !== updatedGoal._id);
+      newAchievedGoals.push(updatedGoal);
+    } else {
+      newAchievedGoals = newAchievedGoals.filter((g) => g._id !== updatedGoal._id);
+      if (!newCurrentGoals.find(g => g._id === updatedGoal._id)) {
+        newCurrentGoals.push(updatedGoal);
       }
+    }
 
-      return {
-        currentGoals: newCurrentGoals,
-        achievedGoals: newAchievedGoals,
-      };
-    });
-  }
+    return {
+      currentGoals: newCurrentGoals,
+      achievedGoals: newAchievedGoals,
+    };
+  });
+}
 
+
+// DELETING GOAL
   async function handleDeleteButtonClick() {
   try {
     const response = await GoalAPI.deleteGoal(goal._id);
@@ -96,6 +101,11 @@
       {finishedTasks}/{totalTasks}
     </p>
   </div>
+
+
+
+
+
 {:else}
   <div class="goal-container {className}">
     <h4>{goal.name}</h4>
@@ -120,7 +130,7 @@
     </div>
 
     {#if isSubgoalsVisible}
-      {#each goal.subgoals as subgoal, index (index)}
+      {#each goal.subgoals as subgoal}
         <div class="flex-row subgoal">
           <input
             type="checkbox"
@@ -141,6 +151,9 @@
     {/if}
   </div>
 {/if}
+
+
+
 
 <style>
   .goal-container {

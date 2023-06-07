@@ -91,8 +91,8 @@ router.get("/user-challenges", async (req, res) => {
 router.post("/challenges", 
 
   [
-    body("name").notEmpty().escape().withMessage("Name is required and must be a string"),
-    body("description").notEmpty().escape().withMessage("Description is required and must be a string"),
+    body("name").notEmpty().withMessage("Name is required and must be a string"),
+    body("description").notEmpty().withMessage("Description is required and must be a string"),
   
   ],
   async (req, res) => {

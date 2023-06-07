@@ -78,6 +78,7 @@ router.patch("/current-goals/:id", async (req, res) => {
     const goalId = req.params.id;
     const updates = req.body;
 
+
     try {
         const goal = await Goal.findOneAndUpdate({ _id: goalId }, updates);
 
@@ -91,6 +92,7 @@ router.patch("/current-goals/:id", async (req, res) => {
         }
 
         await goal.save();
+
 
         res.send(goal);
     } catch (error) {

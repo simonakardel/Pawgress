@@ -73,8 +73,8 @@
             on:change={() => handleCheckboxChange(task)}
           />
 
-          <h4>Day {task.dayNumber}</h4>
-          <p>{task.name}</p>
+          <h4 class="heading-day">Day {task.dayNumber}</h4>
+          <p class="task-name">{task.name}</p>
         </div>
       {/each}
     </div>
@@ -166,5 +166,13 @@
     align-items: flex-end;
     justify-content: flex-end;
 
+  }
+
+  .heading-day {
+    width: 100px;
+  }
+
+  .task-name {
+    width: 230px;
   }
 </style>
