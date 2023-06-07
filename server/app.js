@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv"
 import connect from "./database/connection.js";
 import cookieParser from "cookie-parser";
+import helmet from "helmet";
 
 dotenv.config();
 
@@ -13,10 +14,12 @@ app.use(cors({
     origin: ["http://localhost:5173"]
 }));
 
+
 import setupSocket from "./socket/socket.js";
 
 
 //MIDDLEWARE
+app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
 
