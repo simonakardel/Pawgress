@@ -17,7 +17,7 @@ import Authentication from "../database/models/Auth.js";
 
 import limiter from "../middleware/rateLimiter.js";
 
-//router.use(limiter);
+router.use(limiter);
 
 router.delete("/logout", async (req, res) => {
 
