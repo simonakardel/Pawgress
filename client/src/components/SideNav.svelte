@@ -90,7 +90,7 @@
     left: 0;
     top: 0;
     padding: 1.5rem;
-    width: 250px;
+    width: 300px;
     position: fixed;
     height: 95%;
     background: #224762;

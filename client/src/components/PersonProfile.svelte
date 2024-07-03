@@ -158,10 +158,9 @@
   .img-div {
     width: 80px;
     height: 80px;
-    border-radius: 40px;
+    border-radius: 50%;
     background: grey;
     overflow: hidden;
-    object-fit: contain;
     box-shadow: 0px 4px 6px -2px rgba(16, 24, 40, 0.03);
     box-shadow: 0px 12px 16px -4px rgba(16, 24, 40, 0.08);
   }
@@ -169,6 +168,7 @@
   .img-div img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
   }
 
   .small-p {

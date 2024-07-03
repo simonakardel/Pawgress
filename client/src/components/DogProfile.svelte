@@ -142,15 +142,18 @@
   .img-div {
     width: 80px;
     height: 80px;
-    border-radius: 75px;
+    border-radius: 50%;
     background: grey;
     overflow: hidden;
-    object-fit: contain;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
   }
 
   .img-div img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
   }
 
   .form-grid {

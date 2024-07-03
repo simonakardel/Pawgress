@@ -67,6 +67,7 @@ router.post("/goals",
       await goal.save();
       res.status(200).send(goal);
     } catch (error) {
+        console.error("Failed to save goal:", error);
       res.status(500).send(error.message);
     }
   }

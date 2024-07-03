@@ -30,16 +30,21 @@
 
 <style>
   .avatar-img {
-    width: 45px;
-    height: 45px;
-    border-radius: 20px;
-    margin-right: 10px;
-  }
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  margin-right: 10px;
+  overflow: hidden; 
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+}
 
-  img {
-    width: 100%;
-    object-fit: cover;
-  }
+.avatar-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
   p {
     margin: 0;
