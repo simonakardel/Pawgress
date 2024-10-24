@@ -1,73 +1,52 @@
-# Pawgress
+# Containerizing a Web Application with Docker and Docker Compose
 
-Pawgress is a dog training tracking application built with Node.js and Svelte. It enables users to track their progress in training their dogs. The application was developed as the final exam project for a full-stack JavaScript class.
+This project demonstrates how to containerize a web application using Docker and Docker Compose. 
 
-## Requirements
+**The application consists of three main components:**
 
-The project had the following requirements:
+**Client:** A Svelte-based front-end application served using Nginx.
 
-1. **Develoment Stack**: Utilize Svelte for the front end and Node.js for the back end.
-2. **Database**: Integrate a database for data storage and management.
-3. **Email Functionality**: Send out emails using Nodemailer (e.g., during sign up, forgot password, or contact us scenarios).
-4. **Notifications**: Implement at least one notification using libraries like toastr or svelte-french-toast.
-5. **Authentication**: Implement secure authentication using Bcrypt, Passport.js, Google SSO, OAuth, or Firebase Authenticate.
-6. **Authorization**: Implement authorization, using sessions or JWT for backend security.
-7. **Protected Routes**: Ensure protected front-end routes, using libraries like svelte-navigator to prevent unauthorized access.
+**Server:** A Node.js back-end application.
 
-## Features
+**Database:** A MongoDB database.
 
-To fulfill the requirements I developed the following features:
+## Project Structure
+```
+├── docker-compose.yml
+├── client
+│   ├── Dockerfile.alpine
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── src/
+│   └── ...
+└── server
+    ├── Dockerfile.alpine
+    ├── package.json
+    ├── package-lock.json
+    ├── .env
+    ├── src/
+    └── ...
+```
 
-- **Custom Authentication and Authorization**: 
-  - **Backend**: Implemented using Bcrypt for hashing passwords, JWT for session management, and Express for routing.
-  - **Frontend**: Developed login and sign-out components using Svelte, with route protection handled by svelte-navigator.
-  - **Packages Used**: `bcrypt`, `jsonwebtoken`, `express`, `express-validator`, `svelte-navigator`.
+## Running the Application
 
-- **Data Storage**: 
-  - Utilized MongoDB for data storage, with Mongoose for object data modeling and interaction with the database.
-  - **Packages Used**: `mongodb`, `mongoose`.
+Ensure you have the following installed:
 
-- **Interactive UI**: 
-  - Built with Svelte, providing a dynamic, responsive, and engaging user interface.
-  - **Packages Used**: `svelte`, `vite` for development.
+- Docker
+- Docker Compose: Comes pre-installed with Docker Desktop.
 
-- **Real-Time Notifications**: 
-  - Utilizes Socket.IO to deliver immediate updates and notifications, informing users in real-time.
-  - **Packages Used**: `socket.io`, `socket.io-client`.
+### Steps to Run
 
-- **Email Functionality**:
-  - Developed a feature that allows users to contact the support team directly through the application. This functionality utilizes Nodemailer to handle the sending of these emails.
-  - **Packages Used**: `nodemailer`.
-
-- **Notifications**: 
-  - Implemented using toastr for user notifications.
-  - **Packages Used**: `toastr`.
-
-## Installation
-
-To get Pawgress running locally, follow these steps:
-
-```bash
-git clone https://github.com/simonakardel/pawgress
+1. Clone the Repository:
+```
+git clone https://github.com/simonakardel/Pawgress.git
 cd pawgress
 ```
-### Install dependencies
 
-Navigate to both the `client` and `server` directories to install dependencies.
+2. Set up Environment Variables:
+- Create a .env file in the server directory and add the following environment variables:
 
-```bash
-cd server
-npm install
-
-cd ../client
-npm install
 ```
-
-### Environment Variables
-
-Create a `.env` file in the `server` directory and add the following environment variables:
-
-```bash
 DATABASE_URL=your_mongodb_url
 ACCESS_TOKEN_SECRET=your_access_token
 REFRESH_TOKEN_SECRET=your_refresh_token
@@ -76,48 +55,85 @@ MAIL_PASSWORD=your_mail_password
 APP_PASSWORD=your_app_password
 ```
 
-## Start the application
+### Build and Start the Containers:
 
-To run the server and client locally:
-
-```bash
-# Start the server
-cd server
-nodemon app.js
-
-# Start the client
-cd ../client
-npm run dev
+In the project root directory, run:
 ```
-## Usage
+docker compose up --build
+```
 
-After setting up the project, you can access the application through the web browser at your configured port. Log in or register to start using the app.
+This command will:
 
-## Dependencies
+- Build Docker images for the client and server.
+- Pull the MongoDB image for the database.
+- Start all containers as defined in docker-compose.yml.
 
-### Server Dependencies
 
-- bcrypt
-- cookie-parser
-- cors
-- dotenv
-- express
-- express-validator
-- helmet
-- jsonwebtoken
-- mongodb
-- mongoose
-- morgan
-- nodemailer
-- socket.io
+### Access the Application:
 
-### Client Dependencies
+Open your browser and navigate to:
 
-- @fortawesome/fontawesome-free
-- axios
-- socket.io-client
-- svelte
-- svelte-fa
-- svelte-navigator
-- toastr
-- vite
+```
+http://localhost:3000
+```
+
+This will display the Svelte front-end application.
+
+### Stopping the Application:
+
+To stop and remove the containers, networks, and volumes, run:
+
+```
+docker compose down
+```
+
+## Docker Setup and Configuration
+
+**Docker Compose File:**
+The docker-compose.yml file defines three services: client, server, and database.
+
+### Services:
+
+- **client:**
+Builds from `client/Dockerfile.alpine`.
+Exposes port 80 inside the container, mapped to 3000 on the host.
+- **server:**
+Builds from `server/Dockerfile.alpine`.
+Exposes port 8080.
+Depends on the database service.
+- **database:**
+Uses the `mongo:5.0 image`.
+Stores data in a Docker volume `mongo_data`.
+
+
+### Volumes:
+
+- **mongo_data:**
+Ensures MongoDB data persists across container restarts.
+
+### Networks:
+
+- **default:**
+Allows external communication for the client and server.
+- **db-internal-network:**
+An internal network for secure communication between the server and database.
+Defined with `internal: true` to restrict external access.
+
+### Resource Limits
+Defined under deploy in docker-compose.yml for each service:
+
+```
+client:
+CPU: Limited to 0.25 (25% of a CPU core).
+Memory: Limited to 256M.
+server:
+CPU: Limited to 0.50 (50% of a CPU core).
+Memory: Limited to 512M.
+database:
+CPU: Limited to 0.50.
+Memory: Limited to 512M.
+```
+#### Benefits:
+
+- Prevents any single service from consuming excessive resources.
+- Ensures smoother operation and scalability.

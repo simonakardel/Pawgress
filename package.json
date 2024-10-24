@@ -1,0 +1,13 @@
+{
+  "name": "multi-container-app",
+  "version": "1.0.0",
+  "description": "Multi-container app with Node.js and Svelte using Docker compose",
+  "scripts": {
+    "install-all": "npm install --prefix client && npm install --prefix server",
+    "start-client": "npm start --prefix client",
+    "start-server": "npm start --prefix server",
+    "start-all": "npm run start-client & npm run start-server"
+  },
+  "author": "Simona Kardel",
+  "license": "MIT"
+}

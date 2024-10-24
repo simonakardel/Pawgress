@@ -1,0 +1,55 @@
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile.alpine
+    ports:
+      - '8080:8080'
+    env_file:
+      - ./server/.env  
+    depends_on:
+      - database
+    networks:
+      - default
+      - db-internal-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: '512M'
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.alpine
+    ports:
+      - '3000:80'  
+    depends_on:
+      - server
+    networks:
+      - default
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '256M'
+
+  database:
+    image: mongo:5.0
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - db-internal-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: '512M'
+
+volumes:
+  mongo_data:
+
+networks:
+  db-internal-network:
+    driver: bridge
+    internal: true
